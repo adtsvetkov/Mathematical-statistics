@@ -12,11 +12,11 @@ normal <- function(number){
 
 # распределение Коши
 
-koshi <- function(number){
+cauchy <- function(number){
   x<-rcauchy(number, location = 0, scale = 1)
   b <- 1 + 3.322*log10(number)
-  png(width =784, height = 456, filename = paste("Koshi distribution, n =", number,".png"))
-  hist(x, probability = TRUE, main = paste("Koshi distribution, n=", number), breaks = b, xlab = "cauchyNumbers", ylim=c(0,0.4))
+  png(width =784, height = 456, filename = paste("Cauchy distribution, n =", number,".png"))
+  hist(x, probability = TRUE, main = paste("Cauchy distribution, n=", number), breaks = b, xlab = "cauchyNumbers", ylim=c(0,0.4))
   xx<-seq(min(x)-1, max(x)+1, 0.1)
   lines(xx, dcauchy(xx), col = "red")
   dev.off()
@@ -64,7 +64,7 @@ n<-c(10, 50, 1000)
 
 for(number in n)
   normal(number)
-  koshi(number)
+  cauchy(number)
   laplace(number)
   poissons(number)
   uniform(number)
