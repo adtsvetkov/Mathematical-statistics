@@ -63,7 +63,7 @@ calculate <- function(number, name)
   {
     if(strcmp(name, "Normal") == TRUE)
       sample <- rnorm(number, mean = 0, sd = 1)
-    if(strcmp(name, "Koshi") == TRUE)
+    if(strcmp(name, "Cauchy") == TRUE)
       sample <- rcauchy(number, location = 0, scale = 1)
     if(strcmp(name, "Laplace") == TRUE)
       sample <- rlaplace(number, location = 0, scale = 1/sqrt(2))
@@ -90,7 +90,7 @@ calculate <- function(number, name)
   return(new_matr)
 }
 
-names_arr <- c("Normal", "Koshi", "Laplace", "Poisson", "Uniform")
+names_arr <- c("Normal", "Cauchy", "Laplace", "Poisson", "Uniform")
 numbers <- c(10, 50, 1000)
 
 final_matrix <- data.frame()
