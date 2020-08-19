@@ -93,6 +93,8 @@ spearman_matr <- matrix(data = 0, nrow = 2, ncol = 2)
 colnames(spearman_matr) <- region
 rownames(spearman_matr) <- corr_names
 
+pearson_matr <- matrix(data = 0, nrow = 1, ncol = 2)
+colnames(pearson_matr) <- region
 
 #function draw rectangles - the area of peaks of intensity
 #функция рисует прямоугольники - области пиков интенсивности
@@ -175,6 +177,11 @@ find_m2 <- function(vec)
 Spearman <- function(vec1, vec2)
 {
   return(cor(vec1, vec2, method = "spearman"))
+}
+
+Pearson <- function(vec1, vec2)
+{
+  return(cor(vec1, vec2, method = "pearson"))
 }
 
 #выборочно строим информацию по файлу
@@ -374,6 +381,39 @@ example_foo <- function(AfrAA, NorAA, k)
   spearman_matr[2, 2] <- Spearman(myK[, 2], my_m2[, 2])
   
   View(spearman_matr)
+  
+  #находим коэффициент корреляции Пирсона для нахождения эллипсов рассеяния
+  
+  pearson_matr[1, 1] <- Pearson(my_m1[, 1], my_m2[, 1])
+  pearson_matr[1, 2] <- Pearson(my_m1[, 2], my_m2[, 2])
+  
+  rownames(pearson_matr) <- c("m1 x m2")
+  
+  View(pearson_matr)
+  
+  Sigma_Afr <- rbind(c(var(my_m1[, 1]), sd(my_m1[, 1])*sd(my_m2[, 1])*pearson_matr[1, 1]), c(sd(my_m1[, 1])*sd(my_m2[, 1])*pearson_matr[1, 1], var(my_m2[, 1])))
+  Sigma_Nor <- rbind(c(var(my_m1[, 2]), sd(my_m1[, 2])*sd(my_m2[, 2])*pearson_matr[1, 2]), c(sd(my_m1[, 2])*sd(my_m2[, 2])*pearson_matr[1, 2], var(my_m2[, 2])))
+  
+  mu_Afr <- c(mean(my_m1[, 1]), mean(my_m2[, 1]))
+  mu_Nor <- c(mean(my_m1[, 2]), mean(my_m2[, 2]))
+  
+  #эллипс для Африки
+  
+  require(ellipse)
+  confidence.ellipse <- ellipse(Sigma_Afr ,centre = mu_Afr,level=0.99,npoints=100)
+  png(width = 800, height = 500, filename = paste("Ellipse for Africa.png"))
+  plot(confidence.ellipse, type="l", lwd=2, lty = 50, col = "purple",  xlab = "m1", ylab = "m2", main = "Ellipse for Africa")
+  points(Africa_par[, 2], Africa_par[, 3], col = "red", pch = 19, cex = 2)
+  dev.off()
+  
+  #эллипс для севера
+  
+  require(ellipse)
+  confidence.ellipse <- ellipse(Sigma_Nor ,centre = mu_Nor,level=0.99,npoints=100)
+  png(width = 800, height = 500, filename = paste("Ellipse for North.png"))
+  plot(confidence.ellipse, type="l", lwd=2, lty = 50, col = "purple",  xlab = "m1", ylab = "m2", main = "Ellipse for North")
+  points(North_par[, 2], North_par[, 3], col = "blue", pch = 19, cex = 2)
+  dev.off()
   
 }
 
