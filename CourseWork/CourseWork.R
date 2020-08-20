@@ -415,6 +415,21 @@ example_foo <- function(AfrAA, NorAA, k)
   points(North_par[, 2], North_par[, 3], col = "blue", pch = 19, cex = 2)
   dev.off()
   
+  #два эллипса + общее облако значений
+  
+  require(ellipse)
+  confidence.ellipse <- ellipse(Sigma_Nor ,centre = mu_Nor,level=0.99,npoints=100)
+  png(width = 800, height = 500, filename = paste("All ellipses.png"))
+  plot(North_par[, 2], North_par[, 3], col = "blue", pch = 19, cex = 2, xlab = "m1", ylab = "m2", main = "Values cloud", xlim=c(0, 0.5), ylim = c(-2, 6))
+  points(Africa_par[, 2], Africa_par[, 3], pch = 24, cex=2, col="red", bg="green")
+  lines(confidence.ellipse, type="l", lwd=2, lty = 50, col = "purple")
+  confidence.ellipse <- ellipse(Sigma_Afr ,centre = mu_Afr,level=0.99,npoints=100)
+  lines(confidence.ellipse, type="l", lwd=2, lty = 50, col = "orange")
+  points(North_par[, 2], North_par[, 3], col = "blue", pch = 19, cex = 2)
+  legend("topright", c("Arfica ellipse", "North ellipse"), col = c("orange", "purple"), lty=c(2, 2))
+  legend("topleft", c("Africa","North"), col = c("red", "blue"), pch = c(24, 19))
+  dev.off()
+  
 }
 
 example_foo(AfrAAA, NorAAA, 1)
