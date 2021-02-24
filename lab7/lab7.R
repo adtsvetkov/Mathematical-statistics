@@ -9,7 +9,7 @@ max_likelihood <- function(selection, size)
 
 #наша гипотеза - что у нас нормальное распределение
 
-#метод максимального правдоподобия
+#критерий хи-квадрат Пирсона
 
 chi_squared <- function(selection, size)
 {
